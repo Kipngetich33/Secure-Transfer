@@ -10,17 +10,18 @@ const participantInteract = {
 export const main = Reach.App(() => {
 
     //create contract participant
-    const P = Participant('Participant', participantInteract);
+    const Sender = Participant('Sender', participantInteract);
+    const Reciever = Participant('Reciever', participantInteract);
 
     //initialize contract
     init();
 
     //inform participants that the contract backend is running
-    each([P,],() => { interact.startingBackend() });
+    each([Sender,],() => { interact.startingBackend() });
 
     //just create a publication to avoid publication warning
-    P.only(() => {});
-    P.publish()
+    Sender.only(() => {});
+    Sender.publish()
     commit();
 
     //end contract

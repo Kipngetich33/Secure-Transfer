@@ -28,7 +28,7 @@ getBalance(acc).then((bal) => {
 })
 
 const ctc = acc.contract(backend);
-await ctc.participants.Participant(participantInteract);
+await ctc.participants.Sender(participantInteract);
 
 //end the contract here
 ask.done();
