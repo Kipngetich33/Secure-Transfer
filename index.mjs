@@ -6,19 +6,14 @@ import * as backend from './build/index.main.mjs';
 import {ask} from '@reach-sh/stdlib';
 //get the set environment variable for example Algo the default/fallback is Algo
 const stdlib = loadStdlib(process.env);
+//create a parcipant interact
+const participantInteract = {};
 
-//helper functions
-const toAU = (su) => stdlib.parseCurrency(su);
-const toSU = (au) => stdlib.formatCurrency(au, 4);
-const showBalance = async (acc) => console.log(`Your balance is ${stdlib.balanceOf(acc)}.`);
-
-const participantInteract = (role) => ({
-    start: () => {console.log("Inside common interact")}
-});
-
-//create a new test account and initialiaze the account with 1000 units of the Network
-const acc = await stdlib.newTestAccount(stdlib.parseCurrency(500));
-await showBalance(acc);
+/* create a new test account and initialiaze the amout to 1000000000 ==
+1000 network tokens on algorand */
+const acc = await stdlib.newTestAccount(1000000000);
 const ctc = acc.contract(backend);
-await ctc.participants.sendersInteract(participantInteract);
-await showBalance(acc);
+await ctc.participants.Participant(participantInteract);
+
+//end the contract here
+ask.done();
