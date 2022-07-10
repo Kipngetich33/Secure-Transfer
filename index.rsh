@@ -6,27 +6,40 @@ const participantInteract = {
     startingBackend: Fun([], Null),
 };
 
+const sendersInteract = {
+    ...participantInteract,
+    getRecipientAddress: Fun([],Address)
+};
+
+const recieversInteract = {
+    ...participantInteract,
+};
+
 //export the main reach application 
 export const main = Reach.App(() => {
 
     //create contract participant
-    const Sender = Participant('Sender', participantInteract);
-    const Reciever = Participant('Reciever', participantInteract);
+    const Sender = Participant('Sender', sendersInteract);
+    const Reciever = Participant('Reciever', recieversInteract);
 
     //initialize contract
     init();
 
-    //Sender's only step
-    Sender.only(() => {
-
-    })
-
     //inform participants that the contract backend is running
     each([Sender,Reciever],() => { interact.startingBackend() });
 
-    //just create a publication to avoid publication warning
-    Sender.only(() => {});
+    //Sender's only step
+    Sender.only(() => {
+        
+    })
     Sender.publish()
+    commit();
+
+    //Reciever's only step
+    Reciever.only(() => {
+
+    })
+    Reciever.publish()
     commit();
 
     //end contract
