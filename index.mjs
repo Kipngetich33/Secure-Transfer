@@ -9,8 +9,9 @@ const stdlib = loadStdlib(process.env);
 
 //create helper functions below
 const getBalance = async (who) => await stdlib.balanceOf(who);
-
-
+const fmt = (bal) => {
+    return (bal/1000000).toFixed(4);
+}
 //create a parcipant interact
 const participantInteract = {
     startingBackend: () => {
@@ -18,17 +19,39 @@ const participantInteract = {
     },
 };
 
+//determine the role of the participant in the contract
+const userRole = await ask.ask('Please Enter Role: Sender or Reciever', (role) => {
+    if(role == "Sender" || role == "Reciever"){
+        return role
+    }else{
+        console.log("Invalid input role. Role is either 'Sender' or 'Reciever'")
+    }
+});
 
-/* create a new test account and initialiaze the amout to 1000000000 ==
-1000 network tokens on algorand */
-const acc = await stdlib.newTestAccount(1000000000);
-//now show the balance of the account
-getBalance(acc).then((bal) => {
-    console.log(`bal ${bal}`)
-})
+// Run different actions based on user's role
+if(userRole == "Sender"){
+    //inform the user of their role in the contract
+    console.log("Your Role: Sender")
+    //initialize the contract
+    
+    /* create a new test account and initialiaze the amout to 1000000000 ==
+    1000 network tokens on algorand */
+    const acc = await stdlib.newTestAccount(1000000000);
+   
+    //initialiaze a contract
+    const ctc = acc.contract(backend);
+    await ctc.participants.Sender(participantInteract);
 
-const ctc = acc.contract(backend);
-await ctc.participants.Sender(participantInteract);
+    //now show the balance of the account
+    getBalance(acc).then((bal) => {
+        console.log(`bal ${fmt(bal)}`)
+    })
+
+}else{
+    //inform the user of their role in the contract
+    console.log("Your Role: Reciever")
+}
+
 
 //end the contract here
 ask.done();
