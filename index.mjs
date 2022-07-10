@@ -44,15 +44,22 @@ if(userRole == "Sender"){
 
     //now show the balance of the account
     getBalance(acc).then((bal) => {
-        console.log(`bal ${fmt(bal)}`)
+        console.log(`You Current Account Balance is: ${fmt(bal)}`)
     })
 
     //Show the contract info
     const constractInfo = await ctc.getInfo()
     if(constractInfo){
-        console.log(`Contract info: ${JSON.stringify(constractInfo)}`);
+        console.log(`Contract Info: ${JSON.stringify(constractInfo)}`);
     }
-    
+
+    //now create an address for recipient wih a starting balanc of 1000 network tokens
+    const recipientAcc = await stdlib.newTestAccount(1000000000);
+    const recipientAddress = await recipientAcc.getAddress()
+    //display the created recipients account address to sender
+    if(recipientAddress){
+        console.log(`Recipeint's Account Address is: ${recipientAddress}`)
+    }
 }else{
     //inform the user of their role in the contract
     console.log("Your Role: Reciever")

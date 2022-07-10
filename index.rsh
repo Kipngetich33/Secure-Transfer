@@ -16,8 +16,13 @@ export const main = Reach.App(() => {
     //initialize contract
     init();
 
+    //Sender's only step
+    Sender.only(() => {
+
+    })
+
     //inform participants that the contract backend is running
-    each([Sender,],() => { interact.startingBackend() });
+    each([Sender,Reciever],() => { interact.startingBackend() });
 
     //just create a publication to avoid publication warning
     Sender.only(() => {});
