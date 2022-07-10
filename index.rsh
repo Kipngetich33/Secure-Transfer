@@ -8,7 +8,8 @@ const participantInteract = {
 
 const sendersInteract = {
     ...participantInteract,
-    getRecipientAddress: Fun([],Address)
+    getRecipientAddress: Fun([],Address),
+    displayContract: Fun([Contract],Null)
 };
 
 const recieversInteract = {
@@ -26,11 +27,21 @@ export const main = Reach.App(() => {
     init();
 
     //inform participants that the contract backend is running
-    each([Sender,Reciever],() => { interact.startingBackend() });
+    each([Sender],() => { interact.startingBackend() });
 
     //Sender's only step
     Sender.only(() => {
         
+    })
+    Sender.publish()
+    commit();
+
+    // get contract
+    const contractInfo = getContract();
+    
+    //Sender's only step
+    Sender.only(() => {
+        interact.displayContract(contractInfo);
     })
     Sender.publish()
     commit();

@@ -22,7 +22,12 @@ const participantInteract = ({
 //create a parcipant interact
 const sendersInteract = {
     ...participantInteract,
-
+    getRecipientsAcc: () => {
+        
+    },
+    displayContract: (contractInfo) => {
+        console.log(`Contract Info: ${JSON.stringify(contractInfo)}`);
+    }
 };
 
 //create a parcipant interact
@@ -44,6 +49,7 @@ const userRole = await ask.ask('Please Enter Role: Sender or Reciever', (role) =
 let acc = null;
 // Run different actions based on user's role
 if(userRole == "Sender"){
+    console.log("************************************************Starting Contract******************************************")
     //inform the user of their role in the contract
     console.log("Your Role: Sender")
     //initialize the contract
@@ -60,13 +66,13 @@ if(userRole == "Sender"){
         console.log(`Your Current Account Balance is: ${fmt(bal)}`)
     })
 
-    //display the created recipients account address to sender
-    console.log(recipientsAcc.networkAccount)
-    const addrr = await recipientsAcc.getAddress()
-    if(addrr){
-        console.log("address")
-        console.log(addrr)
-    }
+    // display the created recipients account address to sender
+    // console.log(recipientsAcc.networkAccount)
+    // const addrr = await recipientsAcc.getAddress()
+    // if(addrr){
+    //     console.log("address")
+    //     console.log(addrr)
+    // }
     // const recipientAddress = await recipientsAcc
     // if(recipientAddress){
     //     console.log(recipientAddress)
@@ -76,12 +82,6 @@ if(userRole == "Sender"){
     //initialiaze a contract
     const ctc = sendersAcc.contract(backend);
 
-    //Show the contract info
-    const constractInfo = await ctc.getInfo()
-    if(constractInfo){
-        console.log(`Contract Info: ${JSON.stringify(constractInfo)}`);
-    }
-  
     //await the contract to execute
     await ctc.participants.Sender(sendersInteract);
 
@@ -109,10 +109,9 @@ if(userRole == "Sender"){
     );
     // attach to the contract using the account secret and contract info
     ctc = acc.contract(backend, info);
-    await ctc.participants.Reciever(sendersInteract);
-    
+    await ctc.participants.Reciever(sendersInteract); 
 }
 
 
 //end the contract here
-// ask.done();
+ask.done();
