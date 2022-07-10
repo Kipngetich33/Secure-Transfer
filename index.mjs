@@ -34,7 +34,7 @@ if(userRole == "Sender"){
     console.log("Your Role: Sender")
     //initialize the contract
     
-    /* create a new test account and initialiaze the amout to 1000000000 ==
+    /* create a new test account and initialiaze the amount to 1000000000 ==
     1000 network tokens on algorand */
     const acc = await stdlib.newTestAccount(1000000000);
    
@@ -47,6 +47,12 @@ if(userRole == "Sender"){
         console.log(`bal ${fmt(bal)}`)
     })
 
+    //Show the contract info
+    const constractInfo = await ctc.getInfo()
+    if(constractInfo){
+        console.log(`Contract info: ${JSON.stringify(constractInfo)}`);
+    }
+    
 }else{
     //inform the user of their role in the contract
     console.log("Your Role: Reciever")
