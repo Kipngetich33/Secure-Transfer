@@ -9,20 +9,20 @@ const participantInteract = {
 
 const sendersInteract = {
     ...participantInteract,
-    getRecipientAddress: Fun([],Address),
+    getRecipientAcc: Fun([],Address),
     displayContract: Fun([Contract],Null),
-    recipientsAccount: Bytes(5),
+    recipientsAccount: Address,
 };
 
 const recieversInteract = {
     ...participantInteract,
-    displayRecipientsAccount: Fun([Bytes(5)],Null),
-    providedRecipientAccount: Bytes(5)
+    displayRecipientsAccount: Fun([Address],Null),
+    providedRecipientAccount: Address
 };
 
 //export the main reach application 
 export const main = Reach.App(() => {
-    const mainView = View('Main', { recipientAccountTxt: Bytes(5), amount: UInt });
+    const mainView = View('Main', { recipientAccountTxt: Address, amount: UInt });
 
     //create contract participant
     const Sender = Participant('Sender', sendersInteract);
@@ -46,7 +46,7 @@ export const main = Reach.App(() => {
     //Sender's only step
     Sender.only(() => {
         //Get Recipients Account
-        const recipientsAccountTxt =  declassify(interact.recipientsAccount)
+        const recipientsAccountTxt =  declassify(interact.getRecipientAcc())
         //display contract info to the backend
         interact.displayContract(contractInfo);
     })

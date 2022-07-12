@@ -9,9 +9,9 @@ const stdlib = loadStdlib(process.env);
 
 //create helper functions below
 const getBalance = async (who) => await stdlib.balanceOf(who);
-const fmt = (bal) => {
-    return (bal/1000000).toFixed(4);
-}
+const fmt = (bal) => { return stdlib.formatCurrency(bal,4) }
+
+
 //create a parcipant interact
 const participantInteract = ({
     startingBackend: () => {
@@ -25,8 +25,12 @@ const participantInteract = ({
 //create a parcipant interact
 const sendersInteract = {
     ...participantInteract,
-    getRecipientsAcc: () => {
-        
+    getRecipientAcc: async () => {
+        const relayAcc = await stdlib.newTestAccount(startingBalance);
+        console.log("Relay Network Account")
+        console.log(relayAcc.networkAccount)
+        //now return the entered relay
+        return relayAcc
     },
     displayContract: (contractInfo) => {
         console.log(`Contract Info: ${JSON.stringify(contractInfo)}`);
@@ -64,31 +68,7 @@ if(userRole == "Sender"){
     //initialize the contract
     
     // create senders account
-    const sendersAcc = await stdlib.newTestAccount(startingBalance);
-
-    // ask the user to enter the account secret
-    recipientsAccount = await ask.ask(
-        `Provide Recipient's Account`,
-        (x => x)
-    );
-    //set recipientsAccount in sender's interact
-    if(recipientsAccount){
-        console.log(`Recipient's Account: ${recipientsAccount}`)
-        sendersInteract.recipientsAccount = recipientsAccount
-    }
-
-    // display the created recipients account address to sender
-    // console.log(recipientsAcc.networkAccount)
-    // const addrr = await recipientsAcc.getAddress()
-    // if(addrr){
-    //     console.log("address")
-    //     console.log(addrr)
-    // }
-    // const recipientAddress = await recipientsAcc
-    // if(recipientAddress){
-    //     console.log(recipientAddress)
-    //     console.log(`Recipient's Account Address is: ${recipientAddress}`)
-    // }
+    const sendersAcc = await stdlib.newTestAccount(startingBalance);   
 
     //show the sender's account balance
     getBalance(sendersAcc).then((bal) => {
@@ -129,7 +109,6 @@ if(userRole == "Sender"){
     ctc = recipientsAcc1.contract(backend, info);
     await ctc.participants.Reciever(recieversInteract); 
 }
-
 
 //end the contract here
 ask.done();
